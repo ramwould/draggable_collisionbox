@@ -1,0 +1,43 @@
+#######################################################
+#  Automatic Release Draft Generator (GitHub Action)  #
+#                                                     #
+# Automatic generates a release draft when any tag    #
+# starting with `v___` is pushed.                     #
+#                                                     #
+#######################################################
+name: Draft Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  ASSET_FILENAME: "helpers.zip"
+
+jobs:
+  create-draft-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # - name: Removal Steps
+      #   run: |
+      #     echo "Remove any unwanted file from the zip using the `rm [FILES]` command"
+
+      - name: Create Zip Archive
+        run: |
+          zip -r ${{ env.ASSET_FILENAME }} . -x "*.git*"
+
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: ${{ env.ASSET_FILENAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
