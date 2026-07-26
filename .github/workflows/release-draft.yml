@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 env:
-  ASSET_FILENAME: "helpers.zip"
+  ASSET_FILENAME: "draggable_collisionbox.zip"
 
 jobs:
   create-draft-release:
